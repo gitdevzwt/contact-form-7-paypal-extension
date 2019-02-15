@@ -117,7 +117,7 @@ function cf7pe_plugin_admin_notice() {
 
 	global $pagenow;
 
-	$dir 				= WP_PLUGIN_DIR . '/contact-form-7-paypal-extension-pro/contact-form-7-paypal-extension-pro.php';
+	$dir 			= WP_PLUGIN_DIR . '/contact-form-7-paypal-extension-pro/contact-form-7-paypal-extension-pro.php';
 	$notice_link 		= add_query_arg( array('message' => 'cf7pe-plugin-notice'), admin_url('plugins.php') );
 	$notice_transient 	= get_transient( 'cf7pe_install_notice' );
 
@@ -142,5 +142,11 @@ if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 // Action to display notice
 add_action( 'admin_notices', 'cf7pe_plugin_admin_notice');
 
-// Contat form 7 tag generator Class File
-require_once( CF7PE_DIR . '/includes/admin/class-cf7pe-tag.php' );
+// Contat form 7 tab generator Class File
+require_once( CF7PE_DIR . '/includes/admin/class-cf7pe-tab.php' );
+
+// Script Class
+require_once( CF7PE_DIR . '/includes/class-cf7pe-script.php' );
+
+// Paypal button class
+require_once( CF7PE_DIR . '/includes/shortcodes/cf7pe-paypal-button.php' );
