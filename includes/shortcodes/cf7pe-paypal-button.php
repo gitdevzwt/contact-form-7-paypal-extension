@@ -1,6 +1,6 @@
 <?php
 /**
- * Contat form 7 Paypal button
+ * Contact form 7 Paypal button
  *
  * Handles the Admin side functionality of plugin
  *

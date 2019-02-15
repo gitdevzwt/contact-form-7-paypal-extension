@@ -142,7 +142,7 @@ if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 // Action to display notice
 add_action( 'admin_notices', 'cf7pe_plugin_admin_notice');
 
-// Contat form 7 tab generator Class File
+// Contact form 7 tab generator Class File
 require_once( CF7PE_DIR . '/includes/admin/class-cf7pe-tab.php' );
 
 // Script Class

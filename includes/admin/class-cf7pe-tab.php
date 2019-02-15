@@ -1,6 +1,6 @@
 <?php
 /**
- * Contat form 7 tab generator Class
+ * Contact form 7 tab generator Class
  *
  * Handles the Admin side functionality of plugin
  *
