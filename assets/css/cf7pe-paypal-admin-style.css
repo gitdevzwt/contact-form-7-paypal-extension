@@ -1,0 +1,9 @@
+/*Error class*/
+.form-table .error { 
+    border: 1px solid red; 
+}
+
+/*Small font*/
+.smallfont { 
+    font-size: 13px; 
+}

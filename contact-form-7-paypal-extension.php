@@ -48,7 +48,7 @@ if( !defined( 'CF7PE_META_PREFIX' ) ) {
  * @package Contact Form 7 - PayPal Extension
  * @since 2.4
  */
- function cf7pe_load_textdomain() {
+ function cf7pe_load_textdomain( ) {
 	global $wp_version;
 
 	// Set filter for plugin's languages directory
@@ -77,7 +77,7 @@ if( !defined( 'CF7PE_META_PREFIX' ) ) {
 }
 
 // Action to load plugin text domain
-add_action('plugins_loaded', 'cf7pe_load_textdomain');
+add_action( 'plugins_loaded', 'cf7pe_load_textdomain' );
 
 /**
  * Activation Hook
@@ -89,11 +89,11 @@ add_action('plugins_loaded', 'cf7pe_load_textdomain');
  */
  register_activation_hook( __FILE__, 'cf7pe_install' );
 
- function cf7pe_install() {
+ function cf7pe_install( ) {
 
 	 // Deactivate Pro Version
-	 if( is_plugin_active('contact-form-7-paypal-extension-pro/contact-form-7-paypal-extension-pro.php') ) {
-		 add_action('update_option_active_plugins', 'cf7pe_deactivate_pro_version');
+	 if( is_plugin_active( 'contact-form-7-paypal-extension-pro/contact-form-7-paypal-extension-pro.php' ) ) {
+		 add_action( 'update_option_active_plugins', 'cf7pe_deactivate_pro_version' );
 	 }
  }
 
@@ -103,8 +103,8 @@ add_action('plugins_loaded', 'cf7pe_load_textdomain');
   * @package Contact Form 7 - PayPal Extension
   * @since 2.4
   */
- function cf7pe_deactivate_pro_version() {
-	 deactivate_plugins('contact-form-7-paypal-extension-pro/contact-form-7-paypal-extension-pro.php', true);
+ function cf7pe_deactivate_pro_version( ) {
+	 deactivate_plugins( 'contact-form-7-paypal-extension-pro/contact-form-7-paypal-extension-pro.php', true );
  }
 
  /**
@@ -113,7 +113,7 @@ add_action('plugins_loaded', 'cf7pe_load_textdomain');
  * @package Contact Form 7 - PayPal Extension
  * @since 2.4
  */
-function cf7pe_plugin_admin_notice() {
+function cf7pe_plugin_admin_notice( ) {
 
 	global $pagenow;
 
@@ -135,12 +135,15 @@ function cf7pe_plugin_admin_notice() {
 }
 
 // How it work file, Load admin files
-if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+if (    is_admin() 
+    || ( defined( 'WP_CLI' ) 
+    && WP_CLI ) 
+   ) {
 	require_once( CF7PE_DIR . '/includes/admin/cf7pe-how-it-work.php' );
 }
 
 // Action to display notice
-add_action( 'admin_notices', 'cf7pe_plugin_admin_notice');
+add_action( 'admin_notices', 'cf7pe_plugin_admin_notice' );
 
 // Contact form 7 tab generator Class File
 require_once( CF7PE_DIR . '/includes/admin/class-cf7pe-tab.php' );

@@ -15,36 +15,35 @@ if ( !defined( 'ABSPATH' ) ) {
 
 class Cf7pe_Shortcodes {
 
-    function __construct() {
-            
-         
+    function __construct( ) {
+                     
          // Change form url
-         add_filter( 'wpcf7_form_action_url', array($this, 'cf7pe_paypal_form_url') ); 
+         add_filter( 'wpcf7_form_action_url', array( &$this, 'cf7pe_paypal_form_url')      ); 
          
          //Add required hidden fields
-         add_action( 'wpcf7_contact_form', array($this, 'cf7pe_contact_form_content') ); 
-        
-                
+         add_action( 'wpcf7_contact_form',    array( &$this, 'cf7pe_contact_form_content') ); 
+                        
     }
-    
-    
+        
     /**
     * Function to change paypal form action url
     * 
     * @package Contact Form 7 - PayPal Extension
     * @since 2.4
     */    
-    function cf7pe_paypal_form_url($url)
+    function cf7pe_paypal_form_url( $url )
     {
-        $wpcf7 = WPCF7_ContactForm::get_current();
-        $currentformid= $wpcf7->id;
-        $use_paypal = get_post_meta($currentformid, "_cf7paypal_use_paypal", true);          
+        $wpcf7         = WPCF7_ContactForm::get_current( );
+        $current_formid = $wpcf7->id;
+        $use_paypal    = get_post_meta( $current_formid, "_cf7paypal_use_paypal", true );          
      
-        if($use_paypal==1)
+        if ( $use_paypal == 1 )
         {
-            $use_sandbox_paypal = get_post_meta($currentformid, "_cf7paypal_use_sandbox", true);
-            if($use_sandbox_paypal==1) $url="https://www.sandbox.paypal.com/cgi-bin/webscr";
-            else $url="https://www.paypal.com/cgi-bin/webscr";
+            $use_sandbox_paypal = get_post_meta( $current_formid, "_cf7paypal_use_sandbox", true );
+            if ($use_sandbox_paypal == 1) 
+                $url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
+            else 
+                $url = "https://www.paypal.com/cgi-bin/webscr";
             
         }
         return $url;
@@ -60,22 +59,22 @@ class Cf7pe_Shortcodes {
     function cf7pe_contact_form_content( $instance ) { 
        
        global $pagenow;
-       $currentformid= $instance->id;
-       $formcontent="";
+       $current_formid = $instance->id;
+       $form_content = "";
              
-       $buss_email_paypal = get_post_meta($currentformid, "_cf7paypal_buss_email", true);
-       $currency_paypal = get_post_meta($currentformid, "_cf7paypal_currency", true);
-       $item_amount_paypal = get_post_meta($currentformid, "_cf7paypal_item_amount", true);
-       $item_name_paypal = get_post_meta($currentformid, "_cf7paypal_item_name", true);
-       $item_qty_paypal = get_post_meta($currentformid, "_cf7paypal_item_qty", true);
-       $success_url_paypal = get_post_meta($currentformid, "_cf7paypal_success_url", true);
-       $cancel_url_paypal = get_post_meta($currentformid, "_cf7paypal_cancel_url", true);
+       $buss_email_paypal  = get_post_meta( $current_formid, "_cf7paypal_buss_email", true  );
+       $currency_paypal    = get_post_meta( $current_formid, "_cf7paypal_currency", true    );
+       $item_amount_paypal = get_post_meta( $current_formid, "_cf7paypal_item_amount", true );
+       $item_name_paypal   = get_post_meta( $current_formid, "_cf7paypal_item_name", true   );
+       $item_qty_paypal    = get_post_meta( $current_formid, "_cf7paypal_item_qty", true    );
+       $success_url_paypal = get_post_meta( $current_formid, "_cf7paypal_success_url", true );
+       $cancel_url_paypal  = get_post_meta( $current_formid, "_cf7paypal_cancel_url", true  );
             
-       $formcontent=$instance->form;
+       $form_content = $instance->form;
        $token = md5(uniqid(rand(), true));
-       if($pagenow!="admin.php")
+       if( $pagenow != "admin.php" )
        {
-            $form = $formcontent.""
+            $form = $form_content.""
                    . "[hidden cmd '_xclick']
                       [hidden rm '2']
                       [hidden custom '{$token}']
@@ -97,10 +96,11 @@ class Cf7pe_Shortcodes {
                           
                       ";
 
-            $instance->set_properties( array(
-                     'form'   => $form,
-
-             ) );       
+            $instance->set_properties( 
+                    array(
+                             'form'   => $form,
+                       ) 
+                    );       
        }
     } 
  
@@ -108,6 +108,4 @@ class Cf7pe_Shortcodes {
 }
 
 
-$csfe_shortcode=new Cf7pe_Shortcodes();
-
-
+$csfe_shortcode = new Cf7pe_Shortcodes( );

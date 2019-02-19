@@ -19,19 +19,35 @@ class Cf7pe_Admin {
             
        
         // Admin Init Processes
-         add_action( 'admin_init', array($this, 'cf7pe_admin_init_process') );
+         add_action( 'admin_init',                            array(&$this, 'cf7pe_admin_init_process')               );
          
          // Add Paypal tab
-         add_filter( 'wpcf7_editor_panels',  array($this, 'cf7pe_admin_editor_pannels') );
+         add_filter( 'wpcf7_editor_panels',                   array(&$this, 'cf7pe_admin_editor_pannels')             );
          
          // Paypal tab content
-         add_action( 'wpcf7_admin_after_additional_settings', array($this, 'wpcf7_paypal_after_additional_settings') );
+         add_action( 'wpcf7_admin_after_additional_settings', array(&$this, 'wpcf7_paypal_after_additional_settings') );
          
          // Save paypal settings
-         add_action('wpcf7_after_save', array($this, 'wpcf7_save_paypal_settings'));
+         add_action( 'wpcf7_after_save',                      array(&$this, 'wpcf7_save_paypal_settings')             );
                 
     }
 
+    /**
+    * Admin prior processes
+    *
+    * @package Contact Form 7 - PayPal Extension
+    * @since 2.4
+    */
+    function cf7pe_admin_init_process( ) {
+
+        // If plugin notice is dismissed
+        if ( 
+                 isset( $_GET['message'] ) 
+              && $_GET['message'] == 'cf7pe-plugin-notice' 
+            ) {
+                set_transient( 'cf7pe_install_notice', true, 604800 );
+        }
+    }
     
     /**
     * Add new tab after additional settings
@@ -42,12 +58,12 @@ class Cf7pe_Admin {
     function cf7pe_admin_editor_pannels ( $panels ) 
     {	
         $new_page = array(
-                'paypal' => array(
-                        'title' => __( 'Paypal', 'contact-form-7' ),
-                        'callback' => array($this,'wpcf7_paypal_after_additional_settings')
-                )
-        );	
-        $panels = array_merge($panels, $new_page);	
+                            'paypal' => array(
+                                                 'title' => __( 'Paypal', 'contact-form-7' ),
+                                                 'callback' => array( &$this, 'wpcf7_paypal_after_additional_settings' )
+                                             )
+                        );	
+        $panels = array_merge( $panels, $new_page );	
         return $panels;	
     }
 
@@ -57,32 +73,60 @@ class Cf7pe_Admin {
     * @package Contact Form 7 - PayPal Extension
     * @since 2.4
     */
-    function wpcf7_paypal_after_additional_settings($cf7) 
+    function wpcf7_paypal_after_additional_settings( $cf7 ) 
     {		
 
-        $currency = array('AUD'=>'Australian Dollar','BRL'=>'Brazilian Real','CAD'=>'Canadian Dollar','CZK'=>'Czech Koruna','DKK'=>'Danish Krone','EUR'=>'Euro','HKD'=>'Hong Kong Dollar','HUF'=>'Hungarian Forint','ILS'=>'Israeli New Sheqel','JPY'=>'Japanese Yen','MYR'=>'Malaysian Ringgit','MXN'=>'Mexican Peso','NOK'=>'Norwegian Krone','NZD'=>'New Zealand Dollar','PHP'=>'Philippine Peso','PLN'=>'Polish Zloty','GBP'=>'Pound Sterling','RUB'=>'Russian Ruble','SGD'=>'Singapore Dollar', 'SEK'=>'Swedish Krona','CHF'=>'Swiss Franc','TWD'=>'Taiwan New Dollar','THB'=>'Thai Baht','TRY'=>'Turkish Lira','USD'=>'U.S. Dollar'); 
+        $currency = array(
+                    'AUD' => 'Australian Dollar',
+                    'BRL' => 'Brazilian Real',
+                    'CAD' => 'Canadian Dollar',
+                    'CZK' => 'Czech Koruna',
+                    'DKK' => 'Danish Krone',
+                    'EUR' => 'Euro',
+                    'HKD' => 'Hong Kong Dollar',
+                    'HUF' => 'Hungarian Forint',
+                    'ILS' => 'Israeli New Sheqel',
+                    'JPY' => 'Japanese Yen',
+                    'MYR' => 'Malaysian Ringgit',
+                    'MXN' => 'Mexican Peso',
+                    'NOK' => 'Norwegian Krone',
+                    'NZD' => 'New Zealand Dollar',
+                    'PHP' => 'Philippine Peso',
+                    'PLN' => 'Polish Zloty',
+                    'GBP' => 'Pound Sterling',
+                    'RUB' => 'Russian Ruble',
+                    'SGD' => 'Singapore Dollar', 
+                    'SEK' => 'Swedish Krona',
+                    'CHF' => 'Swiss Franc',
+                    'TWD' => 'Taiwan New Dollar',
+                    'THB' => 'Thai Baht',
+                    'TRY' => 'Turkish Lira',
+                    'USD' => 'U.S. Dollar' ); 
         
-        $currentformid = sanitize_text_field($_GET['post']);	
+        $currentformid = sanitize_text_field( $_GET['post'] );	
        
-	$buss_email_paypal = get_post_meta($currentformid, "_cf7paypal_buss_email", true);
+	$buss_email_paypal  = get_post_meta( $currentformid, '_cf7paypal_buss_email', true  );
         
-        $currency_paypal = get_post_meta($currentformid, "_cf7paypal_currency", true);
-        if($currency_paypal == '') $currency_paypal='USD'; // check if currency is blank then set default currency USD
+        $currency_paypal    = get_post_meta( $currentformid, '_cf7paypal_currency', true    );
+        if( $currency_paypal == '' ) 
+            $currency_paypal = 'USD'; // check if currency is blank then set default currency USD
         
-        $use_sandbox_paypal = get_post_meta($currentformid, "_cf7paypal_use_sandbox", true);
-        $use_sandbox_paypal_checked="";
-        if($use_sandbox_paypal == 1) $use_sandbox_paypal_checked="checked"; // check if value is true then checked the checkbox
+        $use_sandbox_paypal = get_post_meta( $currentformid, '_cf7paypal_use_sandbox', true );
+        $use_sandbox_paypal_checked='';
+        if( $use_sandbox_paypal == 1 ) 
+            $use_sandbox_paypal_checked='checked'; // check if value is true then checked the checkbox
         
-        $use_paypal = get_post_meta($currentformid, "_cf7paypal_use_paypal", true);
-        $use_paypal_checked="";
-        if($use_paypal == 1) $use_paypal_checked="checked"; // check if value is true then checked the checkbox
+        $use_paypal         = get_post_meta( $currentformid, '_cf7paypal_use_paypal', true  );
+        $use_paypal_checked='';
+        if( $use_paypal == 1 ) 
+            $use_paypal_checked = 'checked'; // check if value is true then checked the checkbox
         
         
-        $item_amount_paypal = get_post_meta($currentformid, "_cf7paypal_item_amount", true);
-        $item_name_paypal = get_post_meta($currentformid, "_cf7paypal_item_name", true);
-        $item_qty_paypal = get_post_meta($currentformid, "_cf7paypal_item_qty", true);
-        $success_url_paypal = get_post_meta($currentformid, "_cf7paypal_success_url", true);
-        $cancel_url_paypal = get_post_meta($currentformid, "_cf7paypal_cancel_url", true);
+        $item_amount_paypal = get_post_meta( $currentformid, '_cf7paypal_item_amount', true );
+        $item_name_paypal   = get_post_meta( $currentformid, '_cf7paypal_item_name', true   );
+        $item_qty_paypal    = get_post_meta( $currentformid, '_cf7paypal_item_qty', true    );
+        $success_url_paypal = get_post_meta( $currentformid, '_cf7paypal_success_url', true );
+        $cancel_url_paypal  = get_post_meta( $currentformid, '_cf7paypal_cancel_url', true  );
         
         
         $html="";
@@ -112,11 +156,13 @@ class Cf7pe_Admin {
                     <td>". esc_html( __( 'Select Currency', 'contact-form-7' ) ). " (".esc_html( __('Default USD', 'contact-form-7' ) ).") <br />
                         <select name='currency_paypal' id='currency_paypal' onchange='document.getElementById('currency_paypal').value = this.value;'>";
 
-                                foreach($currency as $key=>$value) 
+                                foreach( $currency as $key => $value ) 
                                 {
-                                    $selected="";
-                                    if($key == $currency_paypal) $selected="selected";
-                                    $html .=" <option value='{$key}' {$selected}>{$value}</option>";
+                                    $selected = "";
+                                    if( $key == $currency_paypal ) 
+                                        $selected = "selected";
+                                    
+                                    $html .=" <option value='{$key}' {$selected}> {$value} </option>";
                              } 
                             $html .="</select>
                         <input type='hidden' value='' name='currency' id='currency' class='oneline option'>
@@ -180,60 +226,51 @@ class Cf7pe_Admin {
     * @package Contact Form 7 - PayPal Extension
     * @since 2.4
     */
-    function wpcf7_save_paypal_settings($contact_form) {
+    function wpcf7_save_paypal_settings( $contact_form ) {
 
         // Get the form id/post id
-        if ($_POST['post_ID']  == -1 )
-            $currentformid = $contact_form->id();
+        if ( $_POST['post_ID']  == -1 )
+            $currentformid  = $contact_form->id();
         else
-            $currentformid = sanitize_text_field($_POST['post_ID']);
+            $currentformid  = sanitize_text_field( $_POST['post_ID']            );
                 
-        $buss_email_paypal = sanitize_text_field($_POST['buss_email_paypal']);        
-        $currency_paypal = sanitize_text_field($_POST['currency_paypal']);                
-        $use_sandbox_paypal = sanitize_text_field($_POST['use_sandbox_paypal']);       
-        if($use_sandbox_paypal == '') $use_sandbox_paypal=0;
+        $buss_email_paypal  = sanitize_text_field( $_POST['buss_email_paypal']  );        
+        $currency_paypal    = sanitize_text_field( $_POST['currency_paypal']    );                
+        $use_sandbox_paypal = sanitize_text_field( $_POST['use_sandbox_paypal'] );       
         
-        $use_paypal = sanitize_text_field($_POST['use_paypal']);       
-        if($use_paypal == '') $use_paypal=0;
+        if( $use_sandbox_paypal == '' ) 
+            $use_sandbox_paypal = 0;
         
-        $item_amount_paypal = sanitize_text_field($_POST['item_amount_paypal']);       
-        $item_name_paypal = sanitize_text_field($_POST['item_name_paypal']);       
-        $item_qty_paypal = sanitize_text_field($_POST['item_qty_paypal']);       
-        $success_url_paypal = sanitize_text_field($_POST['success_url_paypal']);       
-        $cancel_url_paypal = sanitize_text_field($_POST['cancel_url_paypal']);       
+        $use_paypal         = sanitize_text_field( $_POST['use_paypal']         );       
+        if( $use_paypal == '' ) 
+            $use_paypal = 0;
+        
+        $item_amount_paypal = sanitize_text_field( $_POST['item_amount_paypal'] );       
+        $item_name_paypal   = sanitize_text_field( $_POST['item_name_paypal']   );       
+        $item_qty_paypal    = sanitize_text_field( $_POST['item_qty_paypal']    );       
+        $success_url_paypal = sanitize_text_field( $_POST['success_url_paypal'] );       
+        $cancel_url_paypal  = sanitize_text_field( $_POST['cancel_url_paypal']  );       
                
-        $paypal_field_array=array();
-        $paypal_field_array['_cf7paypal_buss_email']=$buss_email_paypal;
-        $paypal_field_array['_cf7paypal_currency']=$currency_paypal;
-        $paypal_field_array['_cf7paypal_use_sandbox']=$use_sandbox_paypal;
-        $paypal_field_array['_cf7paypal_use_paypal']=$use_paypal;
-        $paypal_field_array['_cf7paypal_item_amount']=$item_amount_paypal;
-        $paypal_field_array['_cf7paypal_item_name']=$item_name_paypal;
-        $paypal_field_array['_cf7paypal_item_qty']=$item_qty_paypal;
-        $paypal_field_array['_cf7paypal_success_url']=$success_url_paypal;
-        $paypal_field_array['_cf7paypal_cancel_url']=$cancel_url_paypal;
+        $paypal_field_array=array( );
+        $paypal_field_array['_cf7paypal_buss_email']  = $buss_email_paypal;
+        $paypal_field_array['_cf7paypal_currency']    = $currency_paypal;
+        $paypal_field_array['_cf7paypal_use_sandbox'] = $use_sandbox_paypal;
+        $paypal_field_array['_cf7paypal_use_paypal']  = $use_paypal;
+        $paypal_field_array['_cf7paypal_item_amount'] = $item_amount_paypal;
+        $paypal_field_array['_cf7paypal_item_name']   = $item_name_paypal;
+        $paypal_field_array['_cf7paypal_item_qty']    = $item_qty_paypal;
+        $paypal_field_array['_cf7paypal_success_url'] = $success_url_paypal;
+        $paypal_field_array['_cf7paypal_cancel_url']  = $cancel_url_paypal;
         
         
-        foreach($paypal_field_array as $metakey=>$metaval)
+        foreach( $paypal_field_array as $metakey=>$metaval )
         {
-            update_post_meta($currentformid, $metakey, $metaval);
+            update_post_meta( $currentformid, $metakey, $metaval );
         }
                
     }
     
-    /**
-     * Admin prior processes
-     *
-     * @package Contact Form 7 - PayPal Extension
-     * @since 2.4
-     */
-    function cf7pe_admin_init_process() {
 
-        // If plugin notice is dismissed
-        if( isset($_GET['message']) && $_GET['message'] == 'cf7pe-plugin-notice' ) {
-                set_transient( 'cf7pe_install_notice', true, 604800 );
-        }
-    }
 }
 
-$cf7pe_admin = new Cf7pe_Admin();
+$cf7pe_admin = new Cf7pe_Admin ( );
