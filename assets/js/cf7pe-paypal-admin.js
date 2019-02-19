@@ -49,16 +49,16 @@ document.addEventListener( 'DOMContentLoaded' , function(){
 
         });
     }
-    // Validate email method
+    // Validate email method    
     function validateEmail( email ) {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/; //Take Reference from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
         return re.test( String(email).toLowerCase() );
     }
 
-    // Validate URL method
+    // Validate URL method    
     function ValidateUrl( url )
     {
-        var re = /(?:^|[ \t])((https?:\/\/)?(?:localhost|[\w-]+(?:\.[\w-]+)+)(:\d+)?(\/\S*)?)/;
+        var re = /(?:^|[ \t])((https?:\/\/)?(?:localhost|[\w-]+(?:\.[\w-]+)+)(:\d+)?(\/\S*)?)/; //Take reference from https://regex101.com/r/kIowvx/2
         return re.test( String(url).toLowerCase() );
     }
 });
