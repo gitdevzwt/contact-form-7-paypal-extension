@@ -9,7 +9,7 @@ document.addEventListener( 'DOMContentLoaded' , function(){
            // evt.preventDefault();   
 
             var paypal_form    = document.getElementsByClassName( 'paypal_form' );
-            var inputElements = paypal_form[0].querySelectorAll( 'input, select, checkbox, textarea' );
+            var inputElements  = paypal_form[0].querySelectorAll( 'input, select, checkbox, textarea' );
 
             for ( index = 0; index < inputElements.length; ++index ) {
 
@@ -56,8 +56,7 @@ document.addEventListener( 'DOMContentLoaded' , function(){
     }
 
     // Validate URL method    
-    function ValidateUrl( url )
-    {
+    function ValidateUrl( url ){
         var re = /(?:^|[ \t])((https?:\/\/)?(?:localhost|[\w-]+(?:\.[\w-]+)+)(:\d+)?(\/\S*)?)/; //Take reference from https://regex101.com/r/kIowvx/2
         return re.test( String(url).toLowerCase() );
     }
