@@ -19,16 +19,16 @@ class Cf7pe_Admin {
             
        
         // Admin Init Processes
-         add_action( 'admin_init',                            array(&$this, 'cf7pe_admin_init_process')               );
+         add_action( 'admin_init',                            array( &$this, 'cf7pe_admin_init_process')               );
          
          // Add Paypal tab
-         add_filter( 'wpcf7_editor_panels',                   array(&$this, 'cf7pe_admin_editor_pannels')             );
+         add_filter( 'wpcf7_editor_panels',                   array( &$this, 'cf7pe_admin_editor_pannels')             );
          
          // Paypal tab content
-         add_action( 'wpcf7_admin_after_additional_settings', array(&$this, 'wpcf7_paypal_after_additional_settings') );
+         add_action( 'wpcf7_admin_after_additional_settings', array( &$this, 'cf7pe_after_additional_settings')        );
          
          // Save paypal settings
-         add_action( 'wpcf7_after_save',                      array(&$this, 'wpcf7_save_paypal_settings')             );
+         add_action( 'wpcf7_after_save',                      array( &$this, 'cf7pe_save_paypal_settings')             );
                 
     }
 
@@ -73,7 +73,7 @@ class Cf7pe_Admin {
     * @package Contact Form 7 - PayPal Extension
     * @since 2.4
     */
-    function wpcf7_paypal_after_additional_settings( $cf7 ) 
+    function cf7pe_after_additional_settings( $cf7 ) 
     {		
 
         $currency = array(
@@ -226,7 +226,7 @@ class Cf7pe_Admin {
     * @package Contact Form 7 - PayPal Extension
     * @since 2.4
     */
-    function wpcf7_save_paypal_settings( $contact_form ) {
+    function cf7pe_save_paypal_settings( $contact_form ) {
 
         // Get the form id/post id
         if ( $_POST['post_ID']  == -1 )
@@ -263,9 +263,9 @@ class Cf7pe_Admin {
         $paypal_field_array['_cf7paypal_cancel_url']  = $cancel_url_paypal;
         
         
-        foreach( $paypal_field_array as $metakey=>$metaval )
+        foreach( $paypal_field_array as $meta_key=>$meta_val )
         {
-            update_post_meta( $currentformid, $metakey, $metaval );
+            update_post_meta( $currentformid, $meta_key, $meta_val );
         }
                
     }
